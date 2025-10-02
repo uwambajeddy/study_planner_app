@@ -17,62 +17,132 @@ class MyApp extends StatelessWidget {
       title: 'Study Planner',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        // Dark theme with deep navy background
+        scaffoldBackgroundColor: const Color(0xFF0A1128),
         colorScheme: const ColorScheme.dark(
-          primary: Color(0xFFFFD700), // Yellow accent
-          secondary: Color(0xFFFFD700),
-          surface: Color(0xFF2A2D47), // Card background
-          background: Color(0xFF1A1B2E), // Main background
-          onPrimary: Color(0xFF1A1B2E),
-          onSecondary: Color(0xFF1A1B2E),
-          onSurface: Colors.white,
-          onBackground: Colors.white,
+          primary: Color(0xFFFFC107), // Golden yellow
+          secondary: Color(0xFFFFC107),
+          surface: Colors.white, // White cards/containers
+          background: Color(0xFF0A1128), // Deep navy background
+          onPrimary: Colors.black, // Black text on golden buttons
+          onSecondary: Colors.black,
+          onSurface: Colors.black, // Black text on white cards
+          onBackground: Colors.white, // White text on dark background
         ),
         useMaterial3: true,
-        scaffoldBackgroundColor: const Color(0xFF1A1B2E),
-        cardTheme: CardThemeData(
+        
+        // AppBar Theme
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.transparent,
           elevation: 0,
-          color: const Color(0xFF2A2D47),
+          centerTitle: true,
+          titleTextStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+          ),
+          iconTheme: IconThemeData(color: Colors.white),
+        ),
+        
+        // Card Theme
+        cardTheme: CardThemeData(
+          color: Colors.white,
+          elevation: 4,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
         ),
-        appBarTheme: const AppBarTheme(
-          centerTitle: true,
-          backgroundColor: Color(0xFF1A1B2E),
-          foregroundColor: Colors.white,
-          elevation: 0,
-          titleTextStyle: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: Color(0xFF2A2D47),
-          selectedItemColor: Color(0xFFFFD700),
-          unselectedItemColor: Colors.grey,
-          type: BottomNavigationBarType.fixed,
-          elevation: 0,
-        ),
-        floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          backgroundColor: Color(0xFFFFD700),
-          foregroundColor: Color(0xFF1A1B2E),
-        ),
+        
+        // Button Themes
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFFFFD700),
-            foregroundColor: const Color(0xFF1A1B2E),
+            backgroundColor: const Color(0xFFFFC107),
+            foregroundColor: Colors.black,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           ),
         ),
+        
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: Color(0xFFFFC107),
+          foregroundColor: Colors.black,
+        ),
+        
+        // Bottom Navigation Theme
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: Color(0xFF0A1128),
+          selectedItemColor: Color(0xFFFFC107),
+          unselectedItemColor: Color(0x80FFFFFF), // White with 50% opacity
+          type: BottomNavigationBarType.fixed,
+        ),
+        
+        // Input Decoration Theme
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Colors.grey[300]!),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Colors.grey[300]!),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Color(0xFFFFC107)),
+          ),
+        ),
+        
+        // Dialog Theme
+        dialogTheme: DialogThemeData(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        
+        // Switch Theme
+        switchTheme: SwitchThemeData(
+          thumbColor: MaterialStateProperty.resolveWith((states) {
+            if (states.contains(MaterialState.selected)) {
+              return const Color(0xFFFFC107);
+            }
+            return Colors.grey;
+          }),
+          trackColor: MaterialStateProperty.resolveWith((states) {
+            if (states.contains(MaterialState.selected)) {
+              return const Color(0xFFFFC107).withOpacity(0.5);
+            }
+            return Colors.grey.withOpacity(0.3);
+          }),
+        ),
+        
+        // Checkbox Theme
+        checkboxTheme: CheckboxThemeData(
+          fillColor: MaterialStateProperty.resolveWith((states) {
+            if (states.contains(MaterialState.selected)) {
+              return const Color(0xFFFFC107);
+            }
+            return Colors.transparent;
+          }),
+          checkColor: MaterialStateProperty.all(Colors.black),
+        ),
+        
+        // Text Themes
         textTheme: const TextTheme(
+          // For text on dark backgrounds
+          headlineLarge: TextStyle(color: Colors.white),
+          headlineMedium: TextStyle(color: Colors.white),
+          headlineSmall: TextStyle(color: Colors.white),
+          titleLarge: TextStyle(color: Colors.white),
+          titleMedium: TextStyle(color: Colors.white),
+          titleSmall: TextStyle(color: Colors.white),
           bodyLarge: TextStyle(color: Colors.white),
           bodyMedium: TextStyle(color: Colors.white),
-          titleLarge: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-          titleMedium: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+          bodySmall: TextStyle(color: Color(0x99FFFFFF)), // Secondary text
         ),
       ),
       home: const MainScreen(),

@@ -20,43 +20,23 @@ class TaskCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final timeFormat = DateFormat('h:mm a');
     
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: const Color(0xFF2A2D47),
-        borderRadius: BorderRadius.circular(16),
-      ),
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      elevation: 2,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(8),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(12.0),
           child: Row(
             children: [
-              Container(
-                width: 20,
-                height: 20,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: task.isCompleted 
-                        ? const Color(0xFFFFD700) 
-                        : Colors.grey[400]!,
-                    width: 2,
-                  ),
-                  color: task.isCompleted 
-                      ? const Color(0xFFFFD700) 
-                      : Colors.transparent,
-                ),
-                child: task.isCompleted
-                    ? const Icon(
-                        Icons.check,
-                        size: 14,
-                        color: Color(0xFF1A1B2E),
-                      )
-                    : null,
+              Checkbox(
+                value: task.isCompleted,
+                onChanged: (_) => onToggleComplete(),
+                activeColor: const Color(0xFFFFC107),
+                checkColor: Colors.black,
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,10 +45,12 @@ class TaskCard extends StatelessWidget {
                       task.title,
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: task.isCompleted ? Colors.grey[400] : Colors.white,
+                        fontWeight: FontWeight.bold,
                         decoration: task.isCompleted
                             ? TextDecoration.lineThrough
+                            : null,
+                        color: task.isCompleted
+                            ? Colors.grey
                             : null,
                       ),
                     ),
@@ -81,28 +63,28 @@ class TaskCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14,
                           color: task.isCompleted
-                              ? Colors.grey[500]
-                              : Colors.grey[300],
+                              ? Colors.grey[400]
+                              : Colors.grey[600],
                           decoration: task.isCompleted
                               ? TextDecoration.lineThrough
                               : null,
                         ),
                       ),
                     ],
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 4),
                     Row(
                       children: [
                         Icon(
                           Icons.access_time,
                           size: 14,
-                          color: Colors.grey[400],
+                          color: Colors.grey[600],
                         ),
                         const SizedBox(width: 4),
                         Text(
                           timeFormat.format(task.dueDate),
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.grey[400],
+                            color: Colors.grey[600],
                           ),
                         ),
                         if (task.hasReminder) ...[
@@ -110,7 +92,7 @@ class TaskCard extends StatelessWidget {
                           Icon(
                             Icons.notifications_active,
                             size: 14,
-                            color: const Color(0xFFFFD700),
+                            color: const Color(0xFFFFC107),
                           ),
                         ],
                       ],
@@ -118,18 +100,38 @@ class TaskCard extends StatelessWidget {
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: onToggleComplete,
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  child: Icon(
-                    task.isCompleted ? Icons.check_circle : Icons.radio_button_unchecked,
-                    color: task.isCompleted 
-                        ? const Color(0xFFFFD700) 
-                        : Colors.grey[400],
-                    size: 24,
-                  ),
-                ),
+              IconButton(
+                icon: const Icon(Icons.delete, color: Colors.red),
+                onPressed: () async {
+                  final confirmed = await showDialog<bool>(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Delete Task', style: TextStyle(color: Colors.black)),
+                      content: const Text(
+                        'Are you sure you want to delete this task?',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(false),
+                          child: const Text('Cancel', style: TextStyle(color: Colors.black54)),
+                        ),
+                        ElevatedButton(
+                          onPressed: () => Navigator.of(context).pop(true),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                          ),
+                          child: const Text('Delete'),
+                        ),
+                      ],
+                    ),
+                  );
+
+                  if (confirmed == true) {
+                    onDelete();
+                  }
+                },
               ),
             ],
           ),

@@ -75,6 +75,17 @@ class _CalendarScreenState extends State<CalendarScreen> {
     });
   }
 
+  Future<void> _showAddTaskDialog() async {
+    final result = await showDialog<Task>(
+      context: context,
+      builder: (context) => TaskDialog(initialDate: _selectedDay),
+    );
+
+    if (result != null) {
+      await _storageService.addTask(result);
+      _loadTasks();
+    }
+  }
 
   Future<void> _showEditTaskDialog(Task task) async {
     final result = await showDialog<Task>(
@@ -99,169 +110,142 @@ class _CalendarScreenState extends State<CalendarScreen> {
     _loadTasks();
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Study Planner'),
+        title: const Text('Calendar'),
       ),
-      body: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: const Color(0xFF2A2D47),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: TableCalendar<Task>(
-              firstDay: DateTime.utc(2020, 1, 1),
-              lastDay: DateTime.utc(2030, 12, 31),
-              focusedDay: _focusedDay,
-              calendarFormat: _calendarFormat,
-              selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-              onDaySelected: _onDaySelected,
-              onFormatChanged: (format) {
-                setState(() {
-                  _calendarFormat = format;
-                });
-              },
-              onPageChanged: (focusedDay) {
-                _focusedDay = focusedDay;
-              },
-              eventLoader: _getTasksForDay,
-              calendarStyle: CalendarStyle(
-                outsideDaysVisible: false,
-                weekendTextStyle: const TextStyle(color: Colors.white),
-                defaultTextStyle: const TextStyle(color: Colors.white),
-                todayDecoration: const BoxDecoration(
-                  color: Color(0xFFFFD700),
-                  shape: BoxShape.circle,
-                ),
-                todayTextStyle: const TextStyle(
-                  color: Color(0xFF1A1B2E),
-                  fontWeight: FontWeight.bold,
-                ),
-                selectedDecoration: const BoxDecoration(
-                  color: Color(0xFFFFD700),
-                  shape: BoxShape.circle,
-                ),
-                selectedTextStyle: const TextStyle(
-                  color: Color(0xFF1A1B2E),
-                  fontWeight: FontWeight.bold,
-                ),
-                markerDecoration: const BoxDecoration(
-                  color: Color(0xFFFFD700),
-                  shape: BoxShape.circle,
-                ),
-                markersMaxCount: 3,
-                markerSize: 6,
+      body: Container(
+        color: const Color(0xFF0A1128), // Dark background for the whole screen
+        child: Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
               ),
-              headerStyle: HeaderStyle(
-                formatButtonVisible: true,
-                titleCentered: true,
-                formatButtonShowsNext: false,
-                titleTextStyle: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-                formatButtonTextStyle: const TextStyle(
-                  color: Color(0xFFFFD700),
-                  fontSize: 14,
-                ),
-                formatButtonDecoration: BoxDecoration(
-                  border: Border.all(color: const Color(0xFFFFD700)),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                leftChevronIcon: const Icon(
-                  Icons.chevron_left,
-                  color: Color(0xFFFFD700),
-                ),
-                rightChevronIcon: const Icon(
-                  Icons.chevron_right,
-                  color: Color(0xFFFFD700),
-                ),
-              ),
-              daysOfWeekStyle: const DaysOfWeekStyle(
-                weekdayStyle: TextStyle(color: Colors.grey),
-                weekendStyle: TextStyle(color: Colors.grey),
-              ),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: const Color(0xFF2A2D47),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  DateFormat('MMMM d, y').format(_selectedDay),
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
+              child: TableCalendar<Task>(
+                firstDay: DateTime.utc(2020, 1, 1),
+                lastDay: DateTime.utc(2030, 12, 31),
+                focusedDay: _focusedDay,
+                calendarFormat: _calendarFormat,
+                selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                onDaySelected: _onDaySelected,
+                onFormatChanged: (format) {
+                  setState(() {
+                    _calendarFormat = format;
+                  });
+                },
+                onPageChanged: (focusedDay) {
+                  _focusedDay = focusedDay;
+                },
+                eventLoader: _getTasksForDay,
+                calendarStyle: CalendarStyle(
+                  // White background for calendar
+                  outsideDaysVisible: false,
+                  // Today marker - light blue circle
+                  todayDecoration: const BoxDecoration(
+                    color: Color(0xFF64B5F6), // Light blue
+                    shape: BoxShape.circle,
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFD700),
-                    borderRadius: BorderRadius.circular(12),
+                  // Selected date - golden yellow circle
+                  selectedDecoration: const BoxDecoration(
+                    color: Color(0xFFFFC107), // Golden yellow
+                    shape: BoxShape.circle,
                   ),
-                  child: Text(
-                    '${_selectedDayTasks.length}',
+                  // Event markers - small colored dots
+                  markerDecoration: const BoxDecoration(
+                    color: Color(0xFFFFC107),
+                    shape: BoxShape.circle,
+                  ),
+                  markersMaxCount: 3,
+                  // Text colors
+                  defaultTextStyle: const TextStyle(color: Colors.black),
+                  weekendTextStyle: const TextStyle(color: Colors.black),
+                  selectedTextStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                  todayTextStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+                headerStyle: HeaderStyle(
+                  formatButtonVisible: true,
+                  titleCentered: true,
+                  formatButtonShowsNext: false,
+                  titleTextStyle: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                  leftChevronIcon: const Icon(Icons.chevron_left, color: Colors.black),
+                  rightChevronIcon: const Icon(Icons.chevron_right, color: Colors.black),
+                ),
+              ),
+            ),
+            const Divider(height: 1),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    DateFormat('MMMM d, y').format(_selectedDay),
                     style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Text(
+                    '${_selectedDayTasks.length} ${_selectedDayTasks.length == 1 ? 'task' : 'tasks'}',
+                    style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF1A1B2E),
+                      color: Colors.black.withOpacity(0.6),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Expanded(
-            child: _selectedDayTasks.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.event_available,
-                          size: 60,
-                          color: Colors.grey[400],
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'No tasks for this day',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey[400],
+            Expanded(
+              child: _selectedDayTasks.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.event_available,
+                            size: 60,
+                            color: Colors.black.withOpacity(0.6),
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 16),
+                          Text(
+                            'No tasks for this day',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black.withOpacity(0.8),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      itemCount: _selectedDayTasks.length,
+                      itemBuilder: (context, index) {
+                        final task = _selectedDayTasks[index];
+                        return TaskCard(
+                          task: task,
+                          onTap: () => _showEditTaskDialog(task),
+                          onDelete: () => _deleteTask(task.id),
+                          onToggleComplete: () => _toggleTaskCompletion(task),
+                        );
+                      },
                     ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: _selectedDayTasks.length,
-                    itemBuilder: (context, index) {
-                      final task = _selectedDayTasks[index];
-                      return TaskCard(
-                        task: task,
-                        onTap: () => _showEditTaskDialog(task),
-                        onDelete: () => _deleteTask(task.id),
-                        onToggleComplete: () => _toggleTaskCompletion(task),
-                      );
-                    },
-                  ),
-          ),
-        ],
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showAddTaskDialog,
+        child: const Icon(Icons.add),
       ),
     );
   }
