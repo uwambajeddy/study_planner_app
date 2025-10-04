@@ -8,41 +8,53 @@ class ReminderService {
   Timer? _reminderTimer;
 
   void startReminderService(BuildContext context) {
-    // Check for reminders every minute
-    _reminderTimer = Timer.periodic(const Duration(minutes: 1), (timer) {
+    // Check for reminders every 5 seconds for more responsive notifications
+    _reminderTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
       _checkReminders(context);
     });
+    
+    // Also check immediately on start
+    _checkReminders(context);
   }
 
   void stopReminderService() {
     _reminderTimer?.cancel();
   }
 
+  final Set<String> _shownReminders = {}; // Track already shown reminders
+
   Future<void> _checkReminders(BuildContext context) async {
     final tasks = await _storageService.getTasks();
     final now = DateTime.now();
 
     for (var task in tasks) {
-      if (task.hasReminder && 
-          task.reminderTime != null && 
-          !task.isCompleted) {
+      if (task.hasReminder && task.reminderTime != null && !task.isCompleted) {
         final reminderTime = task.reminderTime!;
-        
-        // Check if reminder time is within the current minute
-        if (reminderTime.year == now.year &&
-            reminderTime.month == now.month &&
-            reminderTime.day == now.day &&
-            reminderTime.hour == now.hour &&
-            reminderTime.minute == now.minute) {
-          _showReminderPopup(context, task);
+
+        // Check if reminder time has passed and is within the current minute
+        if (reminderTime.isBefore(now) || reminderTime.isAtSameMomentAs(now)) {
+          final timeDiff = now.difference(reminderTime);
+          
+          // Show reminder if it's within the last minute and hasn't been shown yet
+          if (timeDiff.inMinutes < 1 && !_shownReminders.contains(task.id)) {
+            _shownReminders.add(task.id);
+            _showReminderPopup(context, task);
+          }
         }
       }
     }
+    
+    // Clean up old shown reminders (older than 5 minutes)
+    final oldReminderCutoff = now.subtract(const Duration(minutes: 5));
+    _shownReminders.removeWhere((taskId) {
+      final task = tasks.firstWhere((t) => t.id == taskId, orElse: () => tasks.first);
+      return task.reminderTime != null && task.reminderTime!.isBefore(oldReminderCutoff);
+    });
   }
 
   void _showReminderPopup(BuildContext context, Task task) {
     if (!context.mounted) return;
-    
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -63,10 +75,16 @@ class ReminderService {
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                ),
+                  color: Color(0xFF212121),
+                )
               ),
               const SizedBox(height: 8),
-              Text(task.description),
+              Text(
+                task.description,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 14, color: const Color(0xFF757575)),
+              ),
             ],
           ),
           actions: [

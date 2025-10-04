@@ -17,25 +17,38 @@ class MyApp extends StatelessWidget {
       title: 'Study Planner',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // Dark theme with deep navy background
+        // Deep navy blue background
         scaffoldBackgroundColor: const Color(0xFF0A1128),
+        
+        // Primary color scheme
         colorScheme: const ColorScheme.dark(
           primary: Color(0xFFFFC107), // Golden yellow
           secondary: Color(0xFFFFC107),
-          surface: Colors.white, // White cards/containers
-          background: Color(0xFF0A1128), // Deep navy background
-          onPrimary: Colors.black, // Black text on golden buttons
+          surface: Colors.white,
+          background: Color(0xFF0A1128), // Deep navy
+          onPrimary: Colors.black,
           onSecondary: Colors.black,
-          onSurface: Colors.black, // Black text on white cards
-          onBackground: Colors.white, // White text on dark background
+          onSurface: Color(0xFF212121),
+          onBackground: Colors.white,
         ),
+        
         useMaterial3: true,
         
-        // AppBar Theme
+        // Card theme - white containers with rounded corners
+        cardTheme: CardThemeData(
+          color: Colors.white,
+          elevation: 2,
+          shadowColor: Colors.black26,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        
+        // AppBar theme
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          centerTitle: true,
+          centerTitle: false,
           titleTextStyle: TextStyle(
             color: Colors.white,
             fontSize: 28,
@@ -44,67 +57,86 @@ class MyApp extends StatelessWidget {
           iconTheme: IconThemeData(color: Colors.white),
         ),
         
-        // Card Theme
-        cardTheme: CardThemeData(
-          color: Colors.white,
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+        // Bottom navigation bar theme
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: Color(0xFF0A1128),
+          selectedItemColor: Color(0xFFFFC107), // Golden yellow
+          unselectedItemColor: Colors.white60,
+          selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
+          type: BottomNavigationBarType.fixed,
+          elevation: 8,
         ),
         
-        // Button Themes
+        // Button themes
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFFFFC107),
+            backgroundColor: const Color(0xFFFFC107), // Golden yellow
             foregroundColor: Colors.black,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            elevation: 2,
           ),
         ),
         
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: const Color(0xFFFFC107),
+          ),
+        ),
+        
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: Colors.white,
+            side: const BorderSide(color: Colors.white60),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+        
+        // Floating action button theme
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          backgroundColor: Color(0xFFFFC107),
+          backgroundColor: Color(0xFFFFC107), // Golden yellow
           foregroundColor: Colors.black,
+          elevation: 4,
         ),
         
-        // Bottom Navigation Theme
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: Color(0xFF0A1128),
-          selectedItemColor: Color(0xFFFFC107),
-          unselectedItemColor: Color(0x80FFFFFF), // White with 50% opacity
-          type: BottomNavigationBarType.fixed,
-        ),
-        
-        // Input Decoration Theme
+        // Input decoration theme
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: Colors.white,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Colors.grey[300]!),
+            borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Colors.grey[300]!),
+            borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Color(0xFFFFC107)),
+            borderSide: const BorderSide(color: Color(0xFFFFC107), width: 2),
           ),
+          labelStyle: const TextStyle(color: Color(0xFF757575)),
+          hintStyle: const TextStyle(color: Color(0xFF9E9E9E)),
         ),
         
-        // Dialog Theme
+        // Dialog theme
         dialogTheme: DialogThemeData(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
+          titleTextStyle: const TextStyle(
+            color: Color(0xFF212121),
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         
-        // Switch Theme
+        // Switch theme
         switchTheme: SwitchThemeData(
           thumbColor: MaterialStateProperty.resolveWith((states) {
             if (states.contains(MaterialState.selected)) {
@@ -120,29 +152,27 @@ class MyApp extends StatelessWidget {
           }),
         ),
         
-        // Checkbox Theme
+        // Checkbox theme
         checkboxTheme: CheckboxThemeData(
           fillColor: MaterialStateProperty.resolveWith((states) {
             if (states.contains(MaterialState.selected)) {
-              return const Color(0xFFFFC107);
+              return Colors.green;
             }
-            return Colors.transparent;
+            return Colors.grey;
           }),
-          checkColor: MaterialStateProperty.all(Colors.black),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
         ),
         
-        // Text Themes
+        // Text theme
         textTheme: const TextTheme(
-          // For text on dark backgrounds
-          headlineLarge: TextStyle(color: Colors.white),
-          headlineMedium: TextStyle(color: Colors.white),
-          headlineSmall: TextStyle(color: Colors.white),
-          titleLarge: TextStyle(color: Colors.white),
-          titleMedium: TextStyle(color: Colors.white),
-          titleSmall: TextStyle(color: Colors.white),
           bodyLarge: TextStyle(color: Colors.white),
           bodyMedium: TextStyle(color: Colors.white),
-          bodySmall: TextStyle(color: Color(0x99FFFFFF)), // Secondary text
+          bodySmall: TextStyle(color: Colors.white70),
+          titleLarge: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          titleMedium: TextStyle(color: Colors.white),
+          titleSmall: TextStyle(color: Colors.white),
         ),
       ),
       home: const MainScreen(),

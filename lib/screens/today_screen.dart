@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../models/task.dart';
 import '../services/storage_service.dart';
 import '../widgets/task_dialog.dart';
@@ -70,11 +69,14 @@ class _TodayScreenState extends State<TodayScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF0A1128),
       appBar: AppBar(
         title: const Text('Today\'s Tasks'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator(color: Color(0xFFFFC107)))
           : _todayTasks.isEmpty
               ? Center(
                   child: Column(
@@ -83,14 +85,14 @@ class _TodayScreenState extends State<TodayScreen> {
                       Icon(
                         Icons.check_circle_outline,
                         size: 80,
-                        color: Colors.white.withOpacity(0.6),
+                        color: Colors.white.withOpacity(0.3),
                       ),
                       const SizedBox(height: 16),
-                      Text(
+                      const Text(
                         'No tasks for today',
                         style: TextStyle(
                           fontSize: 18,
-                          color: Colors.white.withOpacity(0.8),
+                          color: Colors.white,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -105,9 +107,10 @@ class _TodayScreenState extends State<TodayScreen> {
                   ),
                 )
               : RefreshIndicator(
+                  color: const Color(0xFFFFC107),
                   onRefresh: _loadTodayTasks,
                   child: ListView.builder(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(16),
                     itemCount: _todayTasks.length,
                     itemBuilder: (context, index) {
                       final task = _todayTasks[index];
@@ -122,6 +125,8 @@ class _TodayScreenState extends State<TodayScreen> {
                 ),
       floatingActionButton: FloatingActionButton(
         onPressed: _showAddTaskDialog,
+        backgroundColor: const Color(0xFFFFC107),
+        foregroundColor: Colors.black,
         child: const Icon(Icons.add),
       ),
     );

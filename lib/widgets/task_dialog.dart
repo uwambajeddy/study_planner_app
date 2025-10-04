@@ -119,7 +119,7 @@ class _TaskDialogState extends State<TaskDialog> {
     if (_titleController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Please enter a task title', style: TextStyle(color: Colors.white)),
+          content: Text('Please enter a task title'),
           backgroundColor: Colors.red,
         ),
       );
@@ -153,9 +153,13 @@ class _TaskDialogState extends State<TaskDialog> {
     final timeFormat = DateFormat('h:mm a');
 
     return Dialog(
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(24.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -165,26 +169,56 @@ class _TaskDialogState extends State<TaskDialog> {
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: Color(0xFF212121),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               TextField(
                 controller: _titleController,
-                decoration: const InputDecoration(
+                style: const TextStyle(color: Color(0xFF212121)),
+                decoration: InputDecoration(
                   labelText: 'Title',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.title),
+                  labelStyle: const TextStyle(color: Color(0xFF757575)),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: Color(0xFFFFC107), width: 2),
+                  ),
+                  prefixIcon: const Icon(Icons.title, color: Color(0xFF757575)),
                 ),
                 textCapitalization: TextCapitalization.sentences,
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: _descriptionController,
-                decoration: const InputDecoration(
+                style: const TextStyle(color: Color(0xFF212121)),
+                decoration: InputDecoration(
                   labelText: 'Description',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.description),
+                  labelStyle: const TextStyle(color: Color(0xFF757575)),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: Color(0xFFFFC107), width: 2),
+                  ),
+                  prefixIcon: const Icon(Icons.description, color: Color(0xFF757575)),
                 ),
                 maxLines: 3,
                 textCapitalization: TextCapitalization.sentences,
@@ -195,49 +229,92 @@ class _TaskDialogState extends State<TaskDialog> {
                   Expanded(
                     child: OutlinedButton.icon(
                       onPressed: _selectDate,
-                      icon: const Icon(Icons.calendar_today),
-                      label: Text(dateFormat.format(_dueDate)),
+                      icon: const Icon(Icons.calendar_today, color: Color(0xFF212121)),
+                      label: Text(
+                        dateFormat.format(_dueDate),
+                        style: const TextStyle(color: Color(0xFF212121)),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: Color(0xFFE0E0E0)),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: OutlinedButton.icon(
                       onPressed: _selectTime,
-                      icon: const Icon(Icons.access_time),
-                      label: Text(timeFormat.format(DateTime(
-                        2000,
-                        1,
-                        1,
-                        _dueTime.hour,
-                        _dueTime.minute,
-                      ))),
+                      icon: const Icon(Icons.access_time, color: Color(0xFF212121)),
+                      label: Text(
+                        timeFormat.format(DateTime(
+                          2000,
+                          1,
+                          1,
+                          _dueTime.hour,
+                          _dueTime.minute,
+                        )),
+                        style: const TextStyle(color: Color(0xFF212121)),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: Color(0xFFE0E0E0)),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
-              SwitchListTile(
-                title: const Text('Set Reminder', style: TextStyle(color: Colors.black)),
-                subtitle: _hasReminder
-                    ? Text(
-                        'Reminder: ${dateFormat.format(_reminderDateTime)} at ${timeFormat.format(_reminderDateTime)}',
-                        style: const TextStyle(fontSize: 12, color: Colors.black54),
-                      )
-                    : null,
-                value: _hasReminder,
-                onChanged: (value) {
-                  setState(() {
-                    _hasReminder = value;
-                  });
-                },
-                secondary: const Icon(Icons.notifications, color: Color(0xFFFFC107)),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[50],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: SwitchListTile(
+                  title: const Text(
+                    'Set Reminder',
+                    style: TextStyle(
+                      color: Color(0xFF212121),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  subtitle: _hasReminder
+                      ? Text(
+                          'Reminder: ${dateFormat.format(_reminderDateTime)} at ${timeFormat.format(_reminderDateTime)}',
+                          style: const TextStyle(fontSize: 12, color: Color(0xFF757575)),
+                        )
+                      : null,
+                  value: _hasReminder,
+                  onChanged: (value) {
+                    setState(() {
+                      _hasReminder = value;
+                    });
+                  },
+                  activeColor: const Color(0xFFFFC107),
+                  secondary: const Icon(Icons.notifications, color: Color(0xFF757575)),
+                ),
               ),
               if (_hasReminder) ...[
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
                 OutlinedButton.icon(
                   onPressed: _selectReminderDateTime,
-                  icon: const Icon(Icons.alarm),
-                  label: const Text('Set Reminder Time'),
+                  icon: const Icon(Icons.alarm, color: Color(0xFF212121)),
+                  label: const Text(
+                    'Set Reminder Time',
+                    style: TextStyle(color: Color(0xFF212121)),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: Color(0xFFE0E0E0)),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
                 ),
               ],
               const SizedBox(height: 24),
@@ -246,12 +323,23 @@ class _TaskDialogState extends State<TaskDialog> {
                 children: [
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel', style: TextStyle(color: Colors.black54)),
+                    style: TextButton.styleFrom(
+                      foregroundColor: const Color(0xFF757575),
+                    ),
+                    child: const Text('Cancel'),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 12),
                   ElevatedButton(
                     onPressed: _saveTask,
-                    child: Text(widget.task == null ? 'Add' : 'Save'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFFC107),
+                      foregroundColor: Colors.black,
+                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(widget.task == null ? 'Add Task' : 'Save'),
                   ),
                 ],
               ),
