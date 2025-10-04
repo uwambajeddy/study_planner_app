@@ -151,9 +151,6 @@ flutter build apk --release
 flutter build ios --release
 ```
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
@@ -162,9 +159,3 @@ This project is open source and available under the MIT License.
 ## Author
 
 Uwambaje Eddy
-
-## Acknowledgments
-
-- Flutter team for the amazing framework
-- Material Design for UI guidelines
-- Contributors of the packages used in this project
