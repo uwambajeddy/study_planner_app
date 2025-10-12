@@ -136,8 +136,11 @@ flutter run
 4. Days with tasks are highlighted with orange markers
 
 ## Screenshots
+![Screenshot_20251012-223854](https://github.com/user-attachments/assets/6846ea2c-8077-465d-a74e-935793bac0ac)
+![Screenshot_20251012-223801](https://github.com/user-attachments/assets/5c2ef3e8-9d2a-4a45-89c7-e2f1e886dddb)
+![Screenshot_20251012-223743](https://github.com/user-attachments/assets/bbeba947-caf3-4bbe-9363-897649b54b9e)
+![Screenshot_20251012-223733](https://github.com/user-attachments/assets/c4acd7f8-991d-4947-94df-04c32e9afe7c)
 
-[Screenshots would be added here showing the app in action]
 
 ## Building for Production
 
